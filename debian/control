@@ -1,0 +1,21 @@
+Source: file-tracker
+Section: admin
+Priority: optional
+Maintainer: Deepin Package Builder <packages@deepin.com>
+Build-Depends: debhelper (>= 9), dkms, dh-systemd, qtbase5-dev,
+ pkg-config, libdtkcore-dev
+Standards-Version: 3.9.8
+Homepage: http://github.com/linuxdeepin/deepin-anything
+
+Package: file-tracker-dkms
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, dkms
+Description: file-tracker module
+ file-tracker kernel module package
+
+Package: file-tracker
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, file-tracker-dkms
+Description: file tracker server application and lib
+ file-tracker server package
+
