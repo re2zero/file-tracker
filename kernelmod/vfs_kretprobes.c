@@ -244,11 +244,6 @@ static int on_do_mount_ret(struct kretprobe_instance *ri, struct pt_regs *regs)
         return 0;
     }
 
-    if (strstr(args->dir_type, "fuse")) {
-        pr_info("This is the fuse filesytem，so return\n");
-        return 0;
-    }
-
     unsigned long retval = regs_return_value(regs);
     if (retval != 0)
         return 0;
