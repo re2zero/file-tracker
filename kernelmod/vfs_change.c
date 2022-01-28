@@ -657,7 +657,7 @@ void vfs_changed(int act, const char* root, const char* src, const char* dst, un
 {
 	remove_oldest();
 	int extra_bytes = root ? strlen(root) : 0;
-	size_t size = sizeof(vfs_change) + strlen(src) + extra_bytes + 1;
+	size_t size = sizeof(vfs_change) + strlen(current->comm) + 1 + strlen(src) + extra_bytes + 1;
 	if (dst != 0)
 		size += strlen(dst) + extra_bytes + 1;
 	char* p = kmalloc(size, GFP_ATOMIC);
@@ -667,7 +667,10 @@ void vfs_changed(int act, const char* root, const char* src, const char* dst, un
 		return;
 	}
 
-	char* full_src = p + sizeof(vfs_change);
+	char* comm = p + sizeof(vfs_change);
+	strcpy(comm, current->comm);
+
+	char* full_src = comm + strlen(comm) + 1;
 	if (extra_bytes > 0)
 		strcpy(full_src, root);
 	else
@@ -692,7 +695,7 @@ void vfs_changed(int act, const char* root, const char* src, const char* dst, un
 	vc->src = full_src;
 	vc->dst = full_dst;
 	vc->uid = uid;
-	vc->app = current->comm;
+	vc->app = comm;
 	spin_lock(&sl_changes);
 	if (merge_actions) {
 		vc = merge_action(vc);
